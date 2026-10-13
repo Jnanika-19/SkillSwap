@@ -170,7 +170,21 @@ The automated tests verify:
 
 ## Screenshots
 
-Screenshots should be captured from a running app with realistic sample data and added under `docs/screenshots/`. Do not include personal information or credentials in screenshots.
+### Dashboard
+
+![SkillSwap dashboard with learning streak and active swap](docs/screenshots/dashboard.png)
+
+### Skill matches
+
+![Matched student and active swap status](docs/screenshots/matches.png)
+
+### Session notes
+
+![Session notes form for an active skill swap](docs/screenshots/session-notes.png)
+
+### Profile
+
+![Profile page with picture upload and description fields](docs/screenshots/profile.png)
 
 ## Project layout
 
