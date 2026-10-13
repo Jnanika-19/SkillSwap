@@ -1,0 +1,13 @@
+{
+  "name": "skillswap-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SkillSwap application workspace commands",
+  "scripts": {
+    "setup:local": "powershell -NoProfile -ExecutionPolicy Bypass -File backend/setup-local.ps1",
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev",
+    "test": "npm --prefix backend test",
+    "install:backend": "npm --prefix backend install"
+  }
+}

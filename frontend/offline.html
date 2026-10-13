@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#64123f" />
+  <title>You're offline · SkillSwap</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: #261923; background: #f8f6f8; font: 16px/1.6 system-ui, sans-serif; }
+    main { width: min(100%, 440px); padding: 38px; text-align: center; border: 1px solid #f0dbe5; border-radius: 24px; background: #fff; box-shadow: 0 18px 48px #64123f14; }
+    .mark { display: grid; place-items: center; width: 62px; height: 62px; margin: 0 auto 18px; color: white; border-radius: 18px; background: linear-gradient(145deg,#64123f,#c44d86); font-size: 32px; }
+    h1 { margin: 0; font-size: 25px; }
+    p { color: #716671; }
+    button { margin-top: 12px; padding: 12px 20px; color: white; border: 0; border-radius: 10px; background: #a21c63; font: inherit; font-weight: 650; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true">&#8644;</div>
+    <h1>You're offline</h1>
+    <p>Reconnect to continue swapping skills. Your account and learning activity are safe.</p>
+    <button type="button" onclick="location.reload()">Try again</button>
+  </main>
+</body>
+</html>

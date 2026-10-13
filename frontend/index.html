@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#64123f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>SkillSwap - Student Skill Marketplace</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/images/skillswap-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/images/skillswap-icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" id="skip-link" href="#auth-screen">Skip to main content</a>
+  <main id="auth-screen" class="auth-screen" tabindex="-1">
+    <aside class="auth-story" aria-label="About SkillSwap">
+      <div class="story-eyebrow"><span class="story-dot"></span> Student-powered learning</div>
+      <h1>Learn together.<br /><span>Grow further.</span></h1>
+      <p class="story-copy">Share what you know, pick up a new skill, and find your next learning partner on campus.</p>
+      <div class="story-exchange" aria-hidden="true">
+        <div class="story-skill"><span class="story-skill-icon">↗</span><span><strong>Teach a skill</strong><small>Share what you know</small></span></div>
+        <span class="story-exchange-arrow">⇄</span>
+        <div class="story-skill"><span class="story-skill-icon alternate">✦</span><span><strong>Learn something</strong><small>Build your next skill</small></span></div>
+      </div>
+      <p class="story-footnote">A community built on curiosity, not currency.</p>
+    </aside>
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="logo-icon">&#8644;</span>
+        <span class="logo-text">SkillSwap</span>
+      </div>
+      <p class="auth-tagline">Exchange skills, not money.</p>
+      <div class="auth-tabs" id="auth-tabs" role="tablist" aria-label="Account access">
+        <button type="button" class="auth-tab active" id="login-tab" role="tab" aria-selected="true" aria-controls="login-form" onclick="switchAuth('login')">Login</button>
+        <button type="button" class="auth-tab" id="register-tab" role="tab" aria-selected="false" aria-controls="register-form" onclick="switchAuth('register')">Register</button>
+      </div>
+
+      <form id="login-form" class="auth-form" role="tabpanel" aria-labelledby="login-tab" onsubmit="handleLogin(event)">
+        <div class="field"><label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" autocomplete="email" placeholder="you@college.edu" maxlength="254" required />
+        </div>
+        <div class="field"><label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="Password" required />
+        </div>
+        <button type="button" class="forgot-link" onclick="showForgotPassword()">Forgot password?</button>
+        <button type="submit" class="btn-primary full">Login</button>
+        <div id="login-error" class="form-error" role="alert" aria-live="polite"></div>
+      </form>
+
+      <form id="forgot-form" class="auth-form hidden" onsubmit="handleForgotPassword(event)">
+        <h2 class="auth-view-title">Reset your password</h2>
+        <p class="auth-view-copy">Enter your account email and we’ll send a verification code.</p>
+        <div class="field"><label for="forgot-email">Email</label>
+          <input type="email" id="forgot-email" name="email" autocomplete="email" placeholder="you@college.edu" maxlength="254" required />
+        </div>
+        <button type="submit" class="btn-primary full">Send verification code</button>
+        <div id="forgot-message" class="auth-message" role="status" aria-live="polite"></div>
+        <button type="button" class="forgot-link back-to-login" onclick="showLoginForm()">Back to login</button>
+      </form>
+
+      <form id="reset-form" class="auth-form hidden" onsubmit="handleResetPassword(event)">
+        <h2 class="auth-view-title">Verify your email</h2>
+        <p class="auth-view-copy">Enter the six-digit code and choose a new password.</p>
+        <div class="field"><label for="reset-code">Verification code</label>
+          <input type="text" id="reset-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="6-digit code" required />
+        </div>
+        <div class="field"><label for="reset-password">New password</label>
+          <input type="password" id="reset-password" autocomplete="new-password" minlength="8" maxlength="72" required />
+        </div>
+        <button type="submit" class="btn-primary full">Update password</button>
+        <div id="reset-message" class="auth-message" role="status" aria-live="polite"></div>
+        <button type="button" class="forgot-link back-to-login" onclick="showLoginForm()">Back to login</button>
+      </form>
+
+      <form id="register-form" class="auth-form hidden" role="tabpanel" aria-labelledby="register-tab" onsubmit="handleRegister(event)">
+        <div class="field"><label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" name="name" autocomplete="name" placeholder="Your name" minlength="2" maxlength="100" required />
+        </div>
+        <div class="field"><label for="reg-email">Email</label>
+          <input type="email" id="reg-email" name="email" autocomplete="email" placeholder="you@college.edu" maxlength="254" required />
+        </div>
+        <div class="field"><label for="reg-password">Password</label>
+          <input type="password" id="reg-password" name="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" maxlength="72" required />
+        </div>
+        <div class="field"><label for="reg-dept">Department</label>
+          <select id="reg-dept" name="department">
+            <option value="">Select department</option>
+            <option>Computer Science</option>
+            <option>CSE(AI&amp;ML)</option>
+            <option>Design</option>
+            <option>MBA</option>
+            <option>Electronics</option>
+            <option>Mechanical</option>
+            <option>Mathematics</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary full">Create Account</button>
+        <div id="reg-error" class="form-error" role="alert" aria-live="polite"></div>
+      </form>
+    </div>
+  </main>
+
+  <div id="app" class="app hidden">
+    <nav class="sidebar" aria-label="Primary navigation">
+      <div class="sidebar-logo">
+        <span class="logo-icon">&#8644;</span>
+        <span class="logo-text">SkillSwap</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active" data-page="dashboard">
+          <span class="nav-icon">&#9670;</span> Dashboard
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="matches">
+          <span class="nav-icon">&#9678;</span> My Matches
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="requests">
+          <span class="nav-icon">&#9677;</span> Requests
+          <span id="pending-badge" class="badge hidden">0</span>
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="notifications">
+          <span class="nav-icon" aria-hidden="true">&#128276;</span> Notifications
+          <span id="notification-badge" class="badge hidden" aria-label="Unread notifications">0</span>
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="skills">
+          <span class="nav-icon">&#9670;</span> My Skills
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="profile">
+          <span class="nav-icon">&#128100;</span> Profile
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="notes">
+          <span class="nav-icon">&#9776;</span> Session Notes
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="completions">
+          <span class="nav-icon">&#10003;</span> Completions
+        </a></li>
+        <li><a href="#" class="nav-link" data-page="leaderboard">
+          <span class="nav-icon">&#9673;</span> Leaderboard
+        </a></li>
+      </ul>
+      <div class="sidebar-user" id="sidebar-user">
+        <div class="avatar sm" id="sidebar-avatar">AU</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-name">Loading...</div>
+          <div class="sidebar-user-dept" id="sidebar-dept"></div>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()" aria-label="Log out" title="Log out">&#9211;</button>
+      </div>
+    </nav>
+
+    <main class="main-content" id="main-content" tabindex="-1">
+      <div id="page-dashboard" class="page active" aria-live="polite"></div>
+      <div id="page-matches" class="page hidden" aria-live="polite"></div>
+      <div id="page-requests" class="page hidden" aria-live="polite"></div>
+      <div id="page-notifications" class="page hidden" aria-live="polite"></div>
+      <div id="page-skills" class="page hidden" aria-live="polite"></div>
+      <div id="page-profile" class="page hidden" aria-live="polite"></div>
+      <div id="page-notes" class="page hidden" aria-live="polite"></div>
+      <div id="page-completions" class="page hidden" aria-live="polite"></div>
+      <div id="page-leaderboard" class="page hidden" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <div id="rating-modal" class="modal-overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rating-modal-title">
+      <h3 id="rating-modal-title">Rate this Swap</h3>
+      <p id="rating-modal-subtitle"></p>
+      <div class="star-picker" id="star-picker" role="group" aria-label="Choose a rating from one to five stars">
+        <button type="button" class="star-btn" data-val="1" aria-label="1 star" aria-pressed="false">&#9733;</button>
+        <button type="button" class="star-btn" data-val="2" aria-label="2 stars" aria-pressed="false">&#9733;</button>
+        <button type="button" class="star-btn" data-val="3" aria-label="3 stars" aria-pressed="false">&#9733;</button>
+        <button type="button" class="star-btn" data-val="4" aria-label="4 stars" aria-pressed="false">&#9733;</button>
+        <button type="button" class="star-btn" data-val="5" aria-label="5 stars" aria-pressed="false">&#9733;</button>
+      </div>
+      <p class="muted" style="margin-bottom:8px">Rating 3+ stars from both users auto-creates a Skill Completion certificate.</p>
+      <label class="sr-only" for="rating-comment">Comment (optional)</label>
+      <textarea id="rating-comment" maxlength="1000" placeholder="Leave a comment (optional)" rows="3"></textarea>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="closeRatingModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitRating()">Submit Rating</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js?v=23"></script>
+  <script src="js/app.js?v=23"></script>
+  <script src="js/pages/dashboard.js?v=23"></script>
+  <script src="js/pages/matches.js?v=23"></script>
+  <script src="js/pages/requests.js?v=23"></script>
+  <script src="js/pages/notifications.js?v=23"></script>
+  <script src="js/pages/skills.js?v=23"></script>
+  <script src="js/pages/profile.js?v=23"></script>
+  <script src="js/pages/notes.js?v=23"></script>
+  <script src="js/pages/completions.js?v=23"></script>
+  <script src="js/pages/leaderboard.js?v=23"></script>
+</body>
+</html>

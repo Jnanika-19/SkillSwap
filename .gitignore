@@ -1,0 +1,15 @@
+node_modules/
+/backend/uploads/
+npm-debug.log*
+*.log
+.env
+.env.*
+!.env.example
+*.zip
+/.backup_before_v2/
+*.dump
+*.bak
+*.sql.bak
+.DS_Store
+Thumbs.db
+.vscode/
