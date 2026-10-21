@@ -15,6 +15,7 @@ const completionRoutes  = require('./routes/completions'); // Idea 4
 const streakRoutes      = require('./routes/streaks');
 const notificationRoutes = require('./routes/notifications');
 const db                = require('./db/connection');
+const MySQLSessionStore = require('./db/session-store');
 
 const app = express();
 const sessionSecret = process.env.SESSION_SECRET;
@@ -23,6 +24,7 @@ if (!sessionSecret || sessionSecret.length < 32) {
   process.exit(1);
 }
 if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
+const sessionStore = new MySQLSessionStore(db);
 
 // ── Middleware ─────────────────────────────────────────────
 const frontendOrigin = process.env.CORS_ORIGIN;
@@ -32,6 +34,7 @@ app.use(express.urlencoded({ extended: true, limit: '20kb' }));
 
 app.use(session({
   secret:            sessionSecret,
+  store:             sessionStore,
   resave:            false,
   saveUninitialized: false,
   cookie: {
@@ -110,6 +113,7 @@ async function startServer() {
   try {
     // Don't report a healthy web server when login and app data cannot work.
     await db.query('SELECT 1 FROM users LIMIT 0');
+    await sessionStore.init();
   } catch (error) {
     console.error(`Cannot connect to the SkillSwap database "${databaseName}" or find its users table.`);
     console.error('Check that MySQL is running, the schema is installed, and DB_HOST, DB_USER, DB_PASS, and DB_NAME in backend/.env are correct.');
