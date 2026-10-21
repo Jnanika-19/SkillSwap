@@ -10,7 +10,10 @@ const path = require('path');
 const crypto = require('crypto');
 
 const router = express.Router();
-const uploadDir = path.join(__dirname, '..', 'uploads', 'session-materials');
+const uploadRoot = process.env.VERCEL
+  ? path.join('/tmp', 'skillswap-uploads')
+  : path.join(__dirname, '..', 'uploads');
+const uploadDir = path.join(uploadRoot, 'session-materials');
 fs.mkdirSync(uploadDir, { recursive: true });
 
 const extensions = {

@@ -9,7 +9,10 @@ const crypto = require('crypto');
 
 function createUsersRouter(db) {
 const router        = express.Router();
-const avatarDir = path.join(__dirname, '..', 'uploads', 'avatars');
+const uploadRoot = process.env.VERCEL
+  ? path.join('/tmp', 'skillswap-uploads')
+  : path.join(__dirname, '..', 'uploads');
+const avatarDir = path.join(uploadRoot, 'avatars');
 fs.mkdirSync(avatarDir, { recursive: true });
 const avatarTypes = {
   '.png': { mime: 'image/png', signature: bytes => bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) },
