@@ -26,11 +26,35 @@ if (!sessionSecret || sessionSecret.length < 32) {
 if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
 const sessionStore = new MySQLSessionStore(db);
 
+// Initialize the database lazily so the same Express app can run as a Vercel
+// function. Keep successful initialization across warm invocations, and allow
+// a later invocation to retry after a transient connection failure.
+let databaseInitialization;
+function ensureDatabaseReady() {
+  if (!databaseInitialization) {
+    databaseInitialization = (async () => {
+      await db.query('SELECT 1 FROM users LIMIT 0');
+      await sessionStore.init();
+    })().catch(error => {
+      databaseInitialization = null;
+      throw error;
+    });
+  }
+  return databaseInitialization;
+}
+
 // ── Middleware ─────────────────────────────────────────────
 const frontendOrigin = process.env.CORS_ORIGIN;
 if (frontendOrigin) app.use(cors({ origin: frontendOrigin, credentials: true }));
 app.use(express.json({ limit: '20kb' }));
 app.use(express.urlencoded({ extended: true, limit: '20kb' }));
+
+app.use((req, res, next) => {
+  ensureDatabaseReady().then(() => next()).catch(error => {
+    console.error('SkillSwap database initialization failed:', error.code || error.message);
+    res.status(503).json({ error: 'The application database is unavailable' });
+  });
+});
 
 app.use(session({
   secret:            sessionSecret,
@@ -112,8 +136,7 @@ async function startServer() {
 
   try {
     // Don't report a healthy web server when login and app data cannot work.
-    await db.query('SELECT 1 FROM users LIMIT 0');
-    await sessionStore.init();
+    await ensureDatabaseReady();
   } catch (error) {
     console.error(`Cannot connect to the SkillSwap database "${databaseName}" or find its users table.`);
     console.error('Check that MySQL is running, the schema is installed, and DB_HOST, DB_USER, DB_PASS, and DB_NAME in backend/.env are correct.');
@@ -141,4 +164,6 @@ async function startServer() {
   });
 }
 
-startServer();
+module.exports = app;
+
+if (require.main === module) startServer();
